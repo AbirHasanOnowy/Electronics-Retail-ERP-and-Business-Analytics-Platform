@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import compression from "compression";
 import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 
@@ -13,13 +14,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || "development";
-const MONGO_URI = process.env.MONGO_URI;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
-
-if (!MONGO_URI) {
-  console.error("MONGO_URI is missing. Add it to your .env file.");
-  process.exit(1);
-}
 
 app.use(helmet());
 app.use(compression());
@@ -27,7 +22,7 @@ app.use(
   cors({
     origin: CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -53,11 +48,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.use("/api", (req, res) => {
-  res.status(200).json({
-    message: "API base route is ready. Add module routes under /api.",
-  });
-});
+// app.use("/api", (req, res) => {
+//   res.status(200).json({
+//     message: "API base route is ready. Add module routes under /api.",
+//   });
+// });
 
 app.use((req, res) => {
   res.status(404).json({
@@ -65,44 +60,34 @@ app.use((req, res) => {
   });
 });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
+// app.use((err, req, res, next) => {
+//   const statusCode = err.statusCode || 500;
 
-  res.status(statusCode).json({
-    message: err.message || "Internal server error",
-    ...(NODE_ENV === "development" && { stack: err.stack }),
-  });
-});
-
-const connectDatabase = async () => {
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log("MongoDB connected");
-  } catch (error) {
-    console.error("MongoDB connection failed:", error.message);
-    process.exit(1);
-  }
-};
+//   res.status(statusCode).json({
+//     message: err.message || "Internal server error",
+//     ...(NODE_ENV === "development" && { stack: err.stack }),
+//   });
+// });
 
 const startServer = async () => {
-  await connectDatabase();
+  await connectDB();
 
   const server = app.listen(PORT, () => {
     console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);
   });
 
-  const shutdown = async (signal) => {
-    console.log(`${signal} received. Shutting down...`);
+  //   const shutdown = async (signal) => {
+  //     console.log(`${signal} received. Shutting down...`);
 
-    server.close(async () => {
-      await mongoose.connection.close();
-      console.log("Server and MongoDB connection closed");
-      process.exit(0);
-    });
-  };
+  //     server.close(async () => {
+  //       await mongoose.connection.close();
+  //       console.log("Server and MongoDB connection closed");
+  //       process.exit(0);
+  //     });
+  //   };
 
-  process.on("SIGINT", () => shutdown("SIGINT"));
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  //   process.on("SIGINT", () => shutdown("SIGINT"));
+  //   process.on("SIGTERM", () => shutdown("SIGTERM"));
 };
 
 startServer();
