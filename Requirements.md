@@ -263,6 +263,10 @@ Acceptance Criteria:
 
 * Purchase order must reference a supplier.
 * Purchase order must contain products and quantities.
+* Purchase order items must reference product variants.
+* Purchase order items must store quantity, unit cost, and total cost.
+* Purchase order total cost shall be calculated from its items.
+* Purchase order status shall be Draft or Ordered when created.
 
 ---
 
@@ -276,6 +280,10 @@ Acceptance Criteria:
 
 * Inventory quantities shall increase.
 * Purchase order status shall change to Received.
+* Receiving a purchase order shall create PURCHASE inventory transaction records.
+* Inventory transaction `referenceId` shall store the received purchase order ObjectId.
+* A purchase order shall not be received more than once.
+* Cancelled purchase orders shall not be received.
 
 ---
 

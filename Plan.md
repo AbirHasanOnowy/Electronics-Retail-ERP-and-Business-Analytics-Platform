@@ -217,6 +217,9 @@ Examples:
 }
 ```
 
+`referenceId` stores the related business record ObjectId when available, such
+as a purchase order for PURCHASE transactions.
+
 Transaction Types:
 
 * PURCHASE
@@ -255,9 +258,20 @@ Transaction Types:
 {
     _id,
     supplierId,
-    items,
+    items: [
+        {
+            variantId,
+            quantity,
+            unitCost,
+            totalCost
+        }
+    ],
     totalCost,
     status,
+    orderedAt,
+    receivedAt,
+    createdBy,
+    receivedBy,
     createdAt
 }
 ```
@@ -268,6 +282,10 @@ Statuses:
 * Ordered
 * Received
 * Cancelled
+
+When a purchase order is marked as Received, inventory quantities increase for
+each item and PURCHASE inventory transaction records are created with
+`referenceId` pointing to the purchase order `_id`.
 
 ---
 
@@ -505,6 +523,16 @@ GET    /api/suppliers
 POST   /api/suppliers
 PUT    /api/suppliers/:id
 DELETE /api/suppliers/:id
+```
+
+## Purchase Orders
+
+```text
+GET    /api/purchase-orders
+GET    /api/purchase-orders/:id
+POST   /api/purchase-orders
+PUT    /api/purchase-orders/:id
+PATCH  /api/purchase-orders/:id/receive
 ```
 
 ## Sales
