@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRouter from "./modules/auth/AuthRouter.js";
+import productRouter from "./modules/products/ProductRouter.js";
 import userRouter from "./modules/users/UserRouter.js";
 
 dotenv.config();
@@ -52,6 +53,7 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 app.use((req, res) => {
   res.status(404).json({
