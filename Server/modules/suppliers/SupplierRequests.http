@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
+@supplierId = 6a25832dd0a4097a17a797e0
+
+### Get all suppliers
+GET {{baseUrl}}/suppliers
+Authorization: Bearer {{token}}
+
+### Create supplier
+POST {{baseUrl}}/suppliers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "AKZ House",
+  "phone": "+8801788887777",
+  "email": "sales@akzhouse.example",
+  "address": "Level 4, Jamuna Future Park, Dhaka"
+}
+
+### Update supplier
+PUT {{baseUrl}}/suppliers/{{supplierId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "TechSource Distribution Ltd.",
+  "phone": "+8801712345678",
+  "email": "support@techsource.example",
+  "address": "Level 5, IDB Bhaban, Dhaka"
+}
+
+### Delete supplier
+DELETE {{baseUrl}}/suppliers/{{supplierId}}
+Authorization: Bearer {{token}}

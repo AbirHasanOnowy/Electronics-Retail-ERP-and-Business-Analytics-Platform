@@ -10,6 +10,7 @@ import connectDB from "./config/db.js";
 import authRouter from "./modules/auth/AuthRouter.js";
 import inventoryRouter from "./modules/inventory/InventoryRouter.js";
 import productRouter from "./modules/products/ProductRouter.js";
+import supplierRouter from "./modules/suppliers/SupplierRouter.js";
 import userRouter from "./modules/users/UserRouter.js";
 
 dotenv.config();
@@ -56,6 +57,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/inventory", inventoryRouter);
+app.use("/api/suppliers", supplierRouter);
 
 app.use((req, res) => {
   res.status(404).json({
