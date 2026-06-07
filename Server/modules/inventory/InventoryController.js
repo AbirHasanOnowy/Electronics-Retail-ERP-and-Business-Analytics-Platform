@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { ProductVariant } from "../products/ProductModel.js";
 import { Inventory, InventoryTransaction } from "./InventoryModel.js";
 
@@ -52,8 +53,11 @@ const formatTransaction = (transaction) => ({
   createdAt: transaction.createdAt,
 });
 
-const ensureVariantExists = async (variantId) => {
-  const variant = await ProductVariant.findById(variantId);
+const createHttpError = (status, message) =>
+  Object.assign(new Error(message), { status });
+
+const ensureVariantExists = async (variantId, session = null) => {
+  const variant = await ProductVariant.findById(variantId).session(session);
 
   if (!variant) {
     return null;
@@ -77,15 +81,21 @@ const createTransaction = ({
   referenceId,
   notes,
   userId,
+  session,
 }) =>
-  InventoryTransaction.create({
-    variantId,
-    type,
-    quantity,
-    referenceId,
-    notes,
-    createdBy: userId,
-  });
+  InventoryTransaction.create(
+    [
+      {
+        variantId,
+        type,
+        quantity,
+        referenceId,
+        notes,
+        createdBy: userId,
+      },
+    ],
+    { session },
+  ).then(([transaction]) => transaction);
 
 export const getInventory = async (req, res) => {
   try {
@@ -105,6 +115,8 @@ export const getInventory = async (req, res) => {
 };
 
 export const stockIn = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const {
       variantId,
@@ -114,30 +126,37 @@ export const stockIn = async (req, res) => {
       notes = "",
     } = req.body;
 
-    const variant = await ensureVariantExists(variantId);
+    let inventory;
+    let transaction;
 
-    if (!variant) {
-      return res.status(404).json({ message: "Product variant not found" });
-    }
+    await session.withTransaction(async () => {
+      const variant = await ensureVariantExists(variantId, session);
 
-    const inventory = await Inventory.findOneAndUpdate(
-      { variantId },
-      { $inc: { quantity } },
-      {
-        new: true,
-        upsert: true,
-        runValidators: true,
-        setDefaultsOnInsert: true,
-      },
-    );
+      if (!variant) {
+        throw createHttpError(404, "Product variant not found");
+      }
 
-    const transaction = await createTransaction({
-      variantId,
-      type,
-      quantity,
-      referenceId,
-      notes,
-      userId: req.user._id,
+      inventory = await Inventory.findOneAndUpdate(
+        { variantId },
+        { $inc: { quantity } },
+        {
+          new: true,
+          upsert: true,
+          runValidators: true,
+          setDefaultsOnInsert: true,
+          session,
+        },
+      );
+
+      transaction = await createTransaction({
+        variantId,
+        type,
+        quantity,
+        referenceId,
+        notes,
+        userId: req.user._id,
+        session,
+      });
     });
 
     const populatedInventory = await populateInventory(
@@ -149,14 +168,22 @@ export const stockIn = async (req, res) => {
       transaction: formatTransaction(transaction),
     });
   } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
     return res.status(500).json({
       message: "Failed to add stock",
       error: error.message,
     });
+  } finally {
+    await session.endSession();
   }
 };
 
 export const stockOut = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const {
       variantId,
@@ -166,31 +193,38 @@ export const stockOut = async (req, res) => {
       notes = "",
     } = req.body;
 
-    const variant = await ensureVariantExists(variantId);
+    let inventory;
+    let transaction;
 
-    if (!variant) {
-      return res.status(404).json({ message: "Product variant not found" });
-    }
+    await session.withTransaction(async () => {
+      const variant = await ensureVariantExists(variantId, session);
 
-    const inventory = await Inventory.findOneAndUpdate(
-      { variantId, quantity: { $gte: quantity } },
-      { $inc: { quantity: -quantity } },
-      { new: true, runValidators: true },
-    );
+      if (!variant) {
+        throw createHttpError(404, "Product variant not found");
+      }
 
-    if (!inventory) {
-      return res.status(409).json({
-        message: "Insufficient stock for this product variant",
+      inventory = await Inventory.findOneAndUpdate(
+        { variantId, quantity: { $gte: quantity } },
+        { $inc: { quantity: -quantity } },
+        { new: true, runValidators: true, session },
+      );
+
+      if (!inventory) {
+        throw createHttpError(
+          409,
+          "Insufficient stock for this product variant",
+        );
+      }
+
+      transaction = await createTransaction({
+        variantId,
+        type,
+        quantity,
+        referenceId,
+        notes,
+        userId: req.user._id,
+        session,
       });
-    }
-
-    const transaction = await createTransaction({
-      variantId,
-      type,
-      quantity,
-      referenceId,
-      notes,
-      userId: req.user._id,
     });
 
     const populatedInventory = await populateInventory(
@@ -202,9 +236,15 @@ export const stockOut = async (req, res) => {
       transaction: formatTransaction(transaction),
     });
   } catch (error) {
+    if (error.status) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
     return res.status(500).json({
       message: "Failed to remove stock",
       error: error.message,
     });
+  } finally {
+    await session.endSession();
   }
 };
