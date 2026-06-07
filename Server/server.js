@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
-import morgan from "morgan";
 import compression from "compression";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import connectDB from "./config/db.js";
+import authRouter from "./modules/auth/AuthRouter.js";
 
 dotenv.config();
 
@@ -48,11 +49,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// app.use("/api", (req, res) => {
-//   res.status(200).json({
-//     message: "API base route is ready. Add module routes under /api.",
-//   });
-// });
+app.use("/api/auth", authRouter);
 
 app.use((req, res) => {
   res.status(404).json({
