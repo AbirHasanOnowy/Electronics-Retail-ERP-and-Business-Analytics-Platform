@@ -7,6 +7,10 @@ import {
   getUsers,
   updateUser,
 } from "./UserController.js";
+import {
+  authenticate,
+  authorizeRoles,
+} from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -38,12 +42,12 @@ const userBodyValidation = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
   body("role")
-    .optional()
     .isIn(["Admin", "Manager", "Salesperson"])
-    .withMessage("Role must be Admin, Manager, or Salesperson"),
+    .withMessage("Role is required and must be Admin, Manager, or Salesperson"),
   body("isActive")
     .optional()
     .isBoolean()
+    .toBoolean()
     .withMessage("isActive must be true or false"),
 ];
 
@@ -66,8 +70,11 @@ const userUpdateValidation = [
   body("isActive")
     .optional()
     .isBoolean()
+    .toBoolean()
     .withMessage("isActive must be true or false"),
 ];
+
+router.use(authenticate, authorizeRoles("Admin"));
 
 router.get("/", getUsers);
 router.get("/:id", runValidation(userIdValidation), getUserById);
