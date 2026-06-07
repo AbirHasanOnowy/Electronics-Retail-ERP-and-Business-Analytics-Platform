@@ -28,7 +28,10 @@ const stockBodyValidation = [
     .isInt({ min: 1 })
     .toInt()
     .withMessage("Quantity must be at least 1"),
-  body("referenceId").optional().trim(),
+  body("referenceId")
+    .optional({ nullable: true, checkFalsy: true })
+    .isMongoId()
+    .withMessage("Reference id must be a valid ObjectId"),
   body("notes").optional().trim(),
 ];
 

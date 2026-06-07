@@ -3,28 +3,28 @@
     "variantId": "replace-with-product-variant-id",
     "quantity": 10,
     "type": "PURCHASE",
-    "referenceId": "PO-1001",
+    "referenceId": "replace-with-related-record-object-id",
     "notes": "Initial supplier purchase"
   },
   "stockInReturn": {
     "variantId": "replace-with-product-variant-id",
     "quantity": 1,
     "type": "RETURN",
-    "referenceId": "RET-1001",
+    "referenceId": "replace-with-related-record-object-id",
     "notes": "Returned item added back to stock"
   },
   "stockOutSale": {
     "variantId": "replace-with-product-variant-id",
     "quantity": 2,
     "type": "SALE",
-    "referenceId": "SALE-1001",
+    "referenceId": "replace-with-related-record-object-id",
     "notes": "Customer sale"
   },
   "stockOutAdjustment": {
     "variantId": "replace-with-product-variant-id",
     "quantity": 1,
     "type": "ADJUSTMENT",
-    "referenceId": "ADJ-1001",
+    "referenceId": "replace-with-related-record-object-id",
     "notes": "Damaged item removed from inventory"
   }
 }

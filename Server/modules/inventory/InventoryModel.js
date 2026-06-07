@@ -42,9 +42,8 @@ const inventoryTransactionSchema = new mongoose.Schema(
       min: [1, "Quantity must be at least 1"],
     },
     referenceId: {
-      type: String,
-      trim: true,
-      default: "",
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
     },
     notes: {
       type: String,

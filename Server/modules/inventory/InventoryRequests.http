@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:5001/api
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
 @variantId = 6a2552c8e287dc0cf6e6ab62
+@referenceId = replace-with-related-record-object-id
 
 ### Get current inventory
 GET {{baseUrl}}/inventory
@@ -15,7 +16,7 @@ Content-Type: application/json
   "variantId": "{{variantId}}",
   "quantity": 10,
   "type": "PURCHASE",
-  "referenceId": "PO-1001",
+  "referenceId": "{{referenceId}}",
   "notes": "Initial supplier purchase"
 }
 
@@ -28,7 +29,7 @@ Content-Type: application/json
   "variantId": "{{variantId}}",
   "quantity": 1,
   "type": "RETURN",
-  "referenceId": "RET-1001",
+  "referenceId": "{{referenceId}}",
   "notes": "Returned item added back to stock"
 }
 
@@ -41,7 +42,7 @@ Content-Type: application/json
   "variantId": "{{variantId}}",
   "quantity": 2,
   "type": "SALE",
-  "referenceId": "SALE-1001",
+  "referenceId": "{{referenceId}}",
   "notes": "Customer sale"
 }
 
@@ -54,6 +55,6 @@ Content-Type: application/json
   "variantId": "{{variantId}}",
   "quantity": 1,
   "type": "ADJUSTMENT",
-  "referenceId": "ADJ-1001",
+  "referenceId": "{{referenceId}}",
   "notes": "Damaged item removed from inventory"
 }

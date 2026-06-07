@@ -122,7 +122,7 @@ export const stockIn = async (req, res) => {
       variantId,
       quantity,
       type = "PURCHASE",
-      referenceId = "",
+      referenceId = null,
       notes = "",
     } = req.body;
 
@@ -189,7 +189,7 @@ export const stockOut = async (req, res) => {
       variantId,
       quantity,
       type = "SALE",
-      referenceId = "",
+      referenceId = null,
       notes = "",
     } = req.body;
 
