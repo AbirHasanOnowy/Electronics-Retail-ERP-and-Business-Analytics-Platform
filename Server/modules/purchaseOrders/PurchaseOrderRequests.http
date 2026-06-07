@@ -1,0 +1,50 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
+@purchaseOrderId = 6a25a3ecbbdc3f3dec900040
+@supplierId = 6a258283d0a4097a17a797de
+@variantId = 6a2552c8e287dc0cf6e6ab62
+
+### Get all purchase orders
+GET {{baseUrl}}/purchase-orders
+Authorization: Bearer {{token}}
+
+### Get purchase order by id
+GET {{baseUrl}}/purchase-orders/{{purchaseOrderId}}
+Authorization: Bearer {{token}}
+
+### Create purchase order
+POST {{baseUrl}}/purchase-orders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "supplierId": "{{supplierId}}",
+  "status": "Ordered",
+  "items": [
+    {
+      "variantId": "{{variantId}}",
+      "quantity": 10,
+      "unitCost": 45000
+    }
+  ]
+}
+
+### Update purchase order
+PUT {{baseUrl}}/purchase-orders/{{purchaseOrderId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "Ordered",
+  "items": [
+    {
+      "variantId": "{{variantId}}",
+      "quantity": 12,
+      "unitCost": 44000
+    }
+  ]
+}
+
+### Receive purchase order and sync inventory
+PATCH {{baseUrl}}/purchase-orders/{{purchaseOrderId}}/receive
+Authorization: Bearer {{token}}
