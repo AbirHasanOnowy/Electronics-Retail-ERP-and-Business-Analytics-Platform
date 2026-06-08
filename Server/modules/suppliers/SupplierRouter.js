@@ -10,6 +10,7 @@ import {
   authenticate,
   authorizeRoles,
 } from "../../middleware/authMiddleware.js";
+import Supplier from "./SupplierModel.js";
 
 const router = express.Router();
 
@@ -32,7 +33,17 @@ const supplierIdValidation = [
 ];
 
 const supplierBodyValidation = [
-  body("name").trim().notEmpty().withMessage("Supplier name is required"),
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Supplier name is required")
+    .custom(async (name) => {
+      const supplier = await Supplier.findOne({ name });
+
+      if (supplier) {
+        throw new Error("Supplier name already exists");
+      }
+    }),
   body("phone").trim().notEmpty().withMessage("Supplier phone is required"),
   body("email")
     .optional({ checkFalsy: true })
@@ -48,7 +59,14 @@ const supplierUpdateValidation = [
     .optional()
     .trim()
     .notEmpty()
-    .withMessage("Supplier name cannot be empty"),
+    .withMessage("Supplier name cannot be empty")
+    .custom(async (name, { req }) => {
+      const supplier = await Supplier.findOne({ name });
+
+      if (supplier && supplier._id.toString() !== req.params.id) {
+        throw new Error("Supplier name already exists");
+      }
+    }),
   body("phone")
     .optional()
     .trim()
