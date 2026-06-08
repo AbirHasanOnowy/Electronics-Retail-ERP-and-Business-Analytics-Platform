@@ -1,0 +1,141 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
+@categoryId = 6a251db249003b69aa349af1
+@brandId = 6a2622951d37ed1d91c6f4f4
+@productId = 6a2623ea1d37ed1d91c6f4f6
+
+### Get all categories
+GET {{baseUrl}}/products/categories
+Authorization: Bearer {{token}}
+
+### Create category
+POST {{baseUrl}}/products/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Smartphones",
+  "description": "Mobile phones and related handheld devices"
+}
+
+### Update category
+PUT {{baseUrl}}/products/categories/{{categoryId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Smartphones",
+  "description": "Android and iOS smartphones"
+}
+
+### Delete category
+DELETE {{baseUrl}}/products/categories/{{categoryId}}
+Authorization: Bearer {{token}}
+
+### Get all brands
+GET {{baseUrl}}/products/brands
+Authorization: Bearer {{token}}
+
+### Create brand
+POST {{baseUrl}}/products/brands
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Samsung"
+}
+
+### Update brand
+PUT {{baseUrl}}/products/brands/{{brandId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Samsung Electronics"
+}
+
+### Delete brand
+DELETE {{baseUrl}}/products/brands/{{brandId}}
+Authorization: Bearer {{token}}
+
+### Get all products
+GET {{baseUrl}}/products
+Authorization: Bearer {{token}}
+
+### Search products
+GET {{baseUrl}}/products?search=galaxy
+Authorization: Bearer {{token}}
+
+### Filter products by category and brand
+GET {{baseUrl}}/products?categoryId={{categoryId}}&brandId={{brandId}}
+Authorization: Bearer {{token}}
+
+### Get product by id
+GET {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token}}
+
+### Create product
+POST {{baseUrl}}/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Samsung Galaxy S25",
+  "categoryId": "{{categoryId}}",
+  "brandId": "{{brandId}}",
+  "description": "Flagship Android smartphone",
+  "image": "https://example.com/images/galaxy-s25.jpg",
+  "variants": [
+    {
+      "ram": "8GB",
+      "storage": "256GB",
+      "color": "Navy",
+      "sku": "SGS25-8-256-NAVY",
+      "sellingPrice": 92000,
+      "costPrice": 78000
+    },
+    {
+      "ram": "12GB",
+      "storage": "512GB",
+      "color": "Silver",
+      "sku": "SGS25-12-512-SILVER",
+      "sellingPrice": 108000,
+      "costPrice": 91000
+    }
+  ]
+}
+
+### Update product
+PUT {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Samsung Galaxy S25 5G",
+  "categoryId": "{{categoryId}}",
+  "brandId": "{{brandId}}",
+  "description": "Flagship Android smartphone with updated variant pricing",
+  "image": "https://example.com/images/galaxy-s25-5g.jpg",
+  "variants": [
+    {
+      "ram": "8GB",
+      "storage": "256GB",
+      "color": "Navy",
+      "sku": "SGS25-8-256-NAVY",
+      "sellingPrice": 90000,
+      "costPrice": 76000
+    },
+    {
+      "ram": "12GB",
+      "storage": "512GB",
+      "color": "Silver",
+      "sku": "SGS25-12-512-SILVER",
+      "sellingPrice": 105000,
+      "costPrice": 89000
+    }
+  ]
+}
+
+### Delete product
+DELETE {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token}}
