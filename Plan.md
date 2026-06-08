@@ -547,6 +547,7 @@ POST   /api/sales
 
 ```text
 GET    /api/customers
+GET    /api/customers/:id
 POST   /api/customers
 PUT    /api/customers/:id
 ```
