@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI2MTBlMGY4NmRmNmFkYzY5Njk1NTkiLCJpYXQiOjE3ODA4Nzk1ODQsImV4cCI6MTc4MTQ4NDM4NH0.pZm2jZZyIUS63dZp5hCwWHTYtTl8Ff7q0corgf1ntjo
+@saleId = 6a261f3e1d37ed1d91c6f4eb
+@customerId = 6a2604a6ae67f0a6dd2af09f
+@variantId = 6a2552c8e287dc0cf6e6ab62
+
+### Get all sales
+GET {{baseUrl}}/sales
+Authorization: Bearer {{token}}
+
+### Get sale by id
+GET {{baseUrl}}/sales/{{saleId}}
+Authorization: Bearer {{token}}
+
+### Create sale using the variant selling price
+POST {{baseUrl}}/sales
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "customerId": "{{customerId}}",
+  "paymentStatus": "Paid",
+  "discount": 500,
+  "items": [
+    {
+      "variantId": "{{variantId}}",
+      "quantity": 3
+    }
+  ]
+}
+
+### Create sale with explicit unit price
+POST {{baseUrl}}/sales
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "customerId": "{{customerId}}",
+  "paymentStatus": "Pending",
+  "discount": 0,
+  "items": [
+    {
+      "variantId": "{{variantId}}",
+      "quantity": 2,
+      "unitPrice": 72000
+    }
+  ]
+}
+
+### Process sale return and sync inventory
+POST {{baseUrl}}/sales/{{saleId}}/returns
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notes": "Customer returned one unit",
+  "items": [
+    {
+      "variantId": "{{variantId}}",
+      "quantity": 1
+    }
+  ]
+}

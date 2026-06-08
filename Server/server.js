@@ -12,6 +12,7 @@ import customerRouter from "./modules/customers/CustomerRouter.js";
 import inventoryRouter from "./modules/inventory/InventoryRouter.js";
 import productRouter from "./modules/products/ProductRouter.js";
 import purchaseOrderRouter from "./modules/purchaseOrders/PurchaseOrderRouter.js";
+import saleRouter from "./modules/sales/SaleRouter.js";
 import supplierRouter from "./modules/suppliers/SupplierRouter.js";
 import userRouter from "./modules/users/UserRouter.js";
 
@@ -62,6 +63,7 @@ app.use("/api/inventory", inventoryRouter);
 app.use("/api/suppliers", supplierRouter);
 app.use("/api/purchase-orders", purchaseOrderRouter);
 app.use("/api/customers", customerRouter);
+app.use("/api/sales", saleRouter);
 
 app.use((req, res) => {
   res.status(404).json({
