@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
+@budgetId = 6a263177f9745b5782f2574d
+
+### Get all budgets with usage
+GET {{baseUrl}}/budgets
+Authorization: Bearer {{token}}
+
+### Get budgets by month, year, and category
+GET {{baseUrl}}/budgets?month=6&year=2026&category=Rent
+Authorization: Bearer {{token}}
+
+### Create monthly budget
+POST {{baseUrl}}/budgets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "month": 6,
+  "year": 2026,
+  "category": "Salary",
+  "allocatedAmount": 50000
+}
+
+### Update monthly budget
+PUT {{baseUrl}}/budgets/{{budgetId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "allocatedAmount": 55000
+}
