@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:5001/api
+@token = replace-with-admin-jwt-token
+@userId = replace-with-user-id
+
+### Get all users
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Get user by id
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### Create user
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Sales User",
+  "email": "sales@example.com",
+  "password": "password123",
+  "role": "Salesperson",
+  "isActive": true
+}
+
+### Update user
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Sales User",
+  "role": "Salesperson",
+  "isActive": true
+}
+
+### Deactivate user
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "isActive": false
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
