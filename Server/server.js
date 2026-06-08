@@ -8,7 +8,9 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRouter from "./modules/auth/AuthRouter.js";
+import budgetRouter from "./modules/budgets/BudgetRouter.js";
 import customerRouter from "./modules/customers/CustomerRouter.js";
+import expenseRouter from "./modules/expenses/ExpenseRouter.js";
 import inventoryRouter from "./modules/inventory/InventoryRouter.js";
 import productRouter from "./modules/products/ProductRouter.js";
 import purchaseOrderRouter from "./modules/purchaseOrders/PurchaseOrderRouter.js";
@@ -64,6 +66,8 @@ app.use("/api/suppliers", supplierRouter);
 app.use("/api/purchase-orders", purchaseOrderRouter);
 app.use("/api/customers", customerRouter);
 app.use("/api/sales", saleRouter);
+app.use("/api/budgets", budgetRouter);
+app.use("/api/expenses", expenseRouter);
 
 app.use((req, res) => {
   res.status(404).json({

@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
+@expenseId = 6a263266f9745b5782f2574e
+
+### Get all expenses
+GET {{baseUrl}}/expenses
+Authorization: Bearer {{token}}
+
+### Get expenses by month, year, and category
+GET {{baseUrl}}/expenses?month=6&year=2026&category=Rent
+Authorization: Bearer {{token}}
+
+### Get expenses by date range
+GET {{baseUrl}}/expenses?startDate=2026-06-01&endDate=2026-06-30
+Authorization: Bearer {{token}}
+
+### Create expense
+POST {{baseUrl}}/expenses
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "category": "Salary",
+  "amount": 10000,
+  "description": "Guard was unpaid. Cleared his salary",
+  "expenseDate": "2026-06-05"
+}
+
+### Update expense
+PUT {{baseUrl}}/expenses/{{expenseId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 43000,
+  "description": "June showroom rent with maintenance"
+}
+
+### Delete expense
+DELETE {{baseUrl}}/expenses/{{expenseId}}
+Authorization: Bearer {{token}}
