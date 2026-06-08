@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:5001/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI2MTBlMGY4NmRmNmFkYzY5Njk1NTkiLCJpYXQiOjE3ODA4Nzk1ODQsImV4cCI6MTc4MTQ4NDM4NH0.pZm2jZZyIUS63dZp5hCwWHTYtTl8Ff7q0corgf1ntjo
+
+### Register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "user4",
+  "email": "user4@test.com",
+  "password": "user4/",
+  "role": "Salesperson"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user4@test.com",
+  "password": "user4/"
+}
+
+### Logout
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
