@@ -1,8 +1,8 @@
 @baseUrl = http://localhost:5001/api
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTI0ZGQxMTNlM2VmZWM3NWY3NmZkOTIiLCJpYXQiOjE3ODA4MzU4MjIsImV4cCI6MTc4MTQ0MDYyMn0.yTtjm_nNwWjK2BDGKWZJ6y1VEBhAUug66LxzhN_cjqU
-@purchaseOrderId = 6a261bde1d37ed1d91c6f4e2
+@purchaseOrderId = 6a2627d4d1c14771df144227
 @supplierId = 6a258283d0a4097a17a797de
-@variantId = 6a2552c8e287dc0cf6e6ab62
+@variantId = 6a26242c1d37ed1d91c6f4fa
 
 ### Get all purchase orders
 GET {{baseUrl}}/purchase-orders
@@ -24,7 +24,7 @@ Content-Type: application/json
     {
       "variantId": "{{variantId}}",
       "quantity": 10,
-      "unitCost": 45000
+      "unitCost": 80000
     }
   ]
 }
@@ -45,6 +45,6 @@ Content-Type: application/json
   ]
 }
 
-### Receive purchase order and sync inventory
+### Receive purchase order and sync inventory/variant cost price
 PATCH {{baseUrl}}/purchase-orders/{{purchaseOrderId}}/receive
 Authorization: Bearer {{token}}

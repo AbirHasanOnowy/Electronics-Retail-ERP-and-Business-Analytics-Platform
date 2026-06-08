@@ -104,6 +104,23 @@ const ensureVariantsExist = async (items, session = null) => {
   }
 };
 
+const syncVariantCostPrices = (items, session) => {
+  const costPriceByVariant = items.reduce((map, item) => {
+    map.set(item.variantId.toString(), item.unitCost);
+    return map;
+  }, new Map());
+
+  return ProductVariant.bulkWrite(
+    [...costPriceByVariant.entries()].map(([variantId, costPrice]) => ({
+      updateOne: {
+        filter: { _id: variantId },
+        update: { $set: { costPrice } },
+      },
+    })),
+    { session },
+  );
+};
+
 export const getPurchaseOrders = async (req, res) => {
   try {
     const purchaseOrders = await populatePurchaseOrder(
@@ -290,6 +307,8 @@ export const receivePurchaseOrder = async (req, res) => {
           ),
         ),
       );
+
+      await syncVariantCostPrices(purchaseOrder.items, session);
 
       transactions = await InventoryTransaction.insertMany(
         purchaseOrder.items.map((item) => ({
