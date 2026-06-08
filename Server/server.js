@@ -7,6 +7,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
+import analyticsRouter from "./modules/analytics/AnalyticsRouter.js";
 import authRouter from "./modules/auth/AuthRouter.js";
 import budgetRouter from "./modules/budgets/BudgetRouter.js";
 import customerRouter from "./modules/customers/CustomerRouter.js";
@@ -68,6 +69,7 @@ app.use("/api/customers", customerRouter);
 app.use("/api/sales", saleRouter);
 app.use("/api/budgets", budgetRouter);
 app.use("/api/expenses", expenseRouter);
+app.use("/api/analytics", analyticsRouter);
 
 app.use((req, res) => {
   res.status(404).json({
